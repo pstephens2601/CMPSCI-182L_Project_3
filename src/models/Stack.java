@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package project.pkg3;
+package models;
 
 public class Stack {
     
