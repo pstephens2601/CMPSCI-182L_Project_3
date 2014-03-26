@@ -13,18 +13,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainMenu extends JMenuBar {  
-    MainMenu(final GameController game) {
-        JMenu file = new JMenu("File");
-        add(file);
-        
-        JMenuItem start = new JMenuItem("Start Game");
-        start.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                game.startGame();
-            }
-        });
-        file.add(start);
+    
+    public MainMenu(final GameController game) {
+        add(buildFileMenu(game));
+        add(buildGameMenu(game));   
+    }
+    
+    private JMenu buildFileMenu(final GameController game) {
+        JMenu fileMenu = new JMenu("File");
         
         JMenuItem exit = new JMenuItem("Exit");
         exit.addActionListener(new ActionListener(){
@@ -33,6 +29,33 @@ public class MainMenu extends JMenuBar {
                 System.exit(0);
             }
         });
-        file.add(exit);  
+        fileMenu.add(exit);
+        
+        return fileMenu;
+    }
+    
+    private JMenu buildGameMenu(final GameController game) {
+        
+        JMenu gameMenu = new JMenu("game");
+        
+        JMenuItem start = new JMenuItem("Start Game");
+        start.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                game.startGame();
+            }
+        });
+        gameMenu.add(start);
+        
+        JMenuItem end = new JMenuItem("End Game");
+        end.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                game.endGame();
+            }
+        });
+        gameMenu.add(end);
+        
+        return gameMenu;
     }
 }

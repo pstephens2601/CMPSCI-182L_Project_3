@@ -7,12 +7,12 @@
 package views;
 
 import controllers.GameController;
-import views.GameBoard;
+import views.Screen;
 import javax.swing.*;
 
 public class GameWindow extends JFrame {
     
-    private GameBoard display;
+    private Screen [] screens = new Screen [2];
     
     public GameWindow(GameController game) {
         setJMenuBar(new MainMenu(game));
@@ -21,6 +21,8 @@ public class GameWindow extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        buildScreens();
+        setScreen(0);
         setVisible(true);
     }
     
@@ -31,17 +33,33 @@ public class GameWindow extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        buildScreens();
+        setScreen(0);
         setVisible(true);
     }
     
-    public void setDisplay(GameBoard newDisplay) {
-        display = newDisplay;
+    public void startGame() {
+        setScreen(1);
+        for (int i = 0; i < screens.length; i++) {
+            screens[i].startGame();
+        }
     }
     
-    public GameBoard getDisplay() {
-        return display;
+    public void endGame() {
+        setScreen(0);
+        for (int i = 0; i < screens.length; i++) {
+            screens[i].endGame();
+        } 
     }
     
+    private void buildScreens() {
+        screens[0] = new TitleScreen();
+        add(screens[0]);
+        screens[1] =  new GameScreen();
+        add(screens[1]);
+    }
     
-    
+    private void setScreen(int screenNum) {
+        
+    }
 }

@@ -8,6 +8,9 @@ package views;
 
 import javax.swing.*;
         
-public class GameBoard extends JPanel {
+public abstract class Screen extends JPanel {
     
+    public abstract void startGame();
+    public abstract void endGame();
+       
 }
