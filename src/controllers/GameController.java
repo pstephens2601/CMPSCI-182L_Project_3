@@ -27,12 +27,16 @@ public class GameController {
     private Stack stack;
     
     public GameController() {
-        window = new GameWindow(800, 500, this);
-        
+        window = new GameWindow(1024, 768, this); 
     }
     
     public void startGame() {
+        
+        stack = new Stack();
         window.startGame();
+        Room currentRoom = new Room("green");
+        stack.push(currentRoom);
+        //window.showRoom();
     }
     
     public void endGame() {
