@@ -9,11 +9,15 @@ package models;
 public class Room {
     
     private String color;
+    private Door [] doors;
     private int code;
     
     public Room(String newColor, int newCode) {
         color = newColor;
-        code = newCode;
+    }
+    
+    public Room(String newColor) {
+        color = newColor;
     }
     
     public void setColor(String newColor) {
@@ -30,5 +34,13 @@ public class Room {
     
     public int getCode() {
         return code;
+    }
+    
+    public Door[] getDoors() {
+        return doors;
+    }
+   
+    public int getNumDoors() {
+        return doors.length;
     }
 }

@@ -6,11 +6,18 @@
 
 package views;
 
+import controllers.GameController;
+import views.Screen;
 import javax.swing.*;
+import java.awt.*;
+import models.*;
         
 public abstract class Screen extends JPanel {
     
-    public abstract void startGame();
+    protected Room currentRoom;
+    protected Stack stack;
+    
+    public abstract void startGame(Stack stack);
     public abstract void endGame();
-       
+    public abstract void pauseGame();
 }

@@ -9,10 +9,15 @@ package views;
 import controllers.GameController;
 import views.Screen;
 import javax.swing.*;
+import java.awt.*;
+import models.Stack;
 
 public class GameWindow extends JFrame {
     
     private Screen [] screens = new Screen [2];
+    private JPanel screenContainer = new JPanel();
+    private CardLayout cards = new CardLayout();
+    private Stack roomStack;
     
     public GameWindow(GameController game) {
         setJMenuBar(new MainMenu(game));
@@ -21,45 +26,46 @@ public class GameWindow extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        buildScreens();
-        setScreen(0);
+        buildScreens(game);
+        cards.show(screenContainer, "title");
         setVisible(true);
     }
     
     public GameWindow(int width, int height, GameController game) {
+        
         setJMenuBar(new MainMenu(game));
         setTitle("The Golden Keyboard");
         setSize(width, height);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        buildScreens();
-        setScreen(0);
+        buildScreens(game);
+        cards.show(screenContainer, "title");
         setVisible(true);
     }
     
-    public void startGame() {
-        setScreen(1);
-        for (int i = 0; i < screens.length; i++) {
-            screens[i].startGame();
-        }
+    public void startGame(Stack stack) {
+        cards.show(screenContainer, "game");
+        screens[1].startGame(stack);
     }
     
     public void endGame() {
-        setScreen(0);
+        cards.show(screenContainer, "title");
         for (int i = 0; i < screens.length; i++) {
             screens[i].endGame();
         } 
     }
     
-    private void buildScreens() {
-        screens[0] = new TitleScreen();
-        add(screens[0]);
-        screens[1] =  new GameScreen();
-        add(screens[1]);
+    public void setStack(Stack newStack) {
+        roomStack = newStack;
     }
     
-    private void setScreen(int screenNum) {
-        
-    }
+    private void buildScreens(GameController currentGame) {
+        screenContainer.setLayout(cards);
+        add(screenContainer);
+        screens[0] = new TitleScreen();
+        screenContainer.add(screens[0], "title");
+        screens[1] =  new GameScreen(currentGame);
+        screenContainer.add(screens[1], "game");
+    }   
 }

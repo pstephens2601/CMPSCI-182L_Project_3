@@ -6,22 +6,30 @@
 
 package views;
 
+import java.awt.*;
 import javax.swing.*;
+import models.Stack;
 
 public class TitleScreen extends Screen {
     
     public TitleScreen() {
         add(new JLabel("Title Screen"));
+        setBackground(Color.WHITE);
         setVisible(true);
     }
     
     @Override
-    public void startGame() {
+    public void startGame(Stack stack) {
         setVisible(false);
     }
     
     @Override
-    public void endGame() {
+    public void pauseGame() {
         
+    }
+    
+    @Override
+    public void endGame() {
+        setVisible(true);
     }   
 }
