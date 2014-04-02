@@ -1,22 +1,20 @@
 /*------------------------------------------------------------------------------
     Programmer: Patrick Stephens
+    Email: pstephens2601@gmail.com
     Date: 3/21/14
     Title/Class: Project 3  / CMPSCI 182L - Ferguson
 
-    Class Description:  Class which compares the number of array slots looked 
-    at in linear and binary searches.
+    Class Description:  Main controller for the game.  Handles all of the
+    game logic.
  -----------------------------------------------------------------------------*/
 
 package controllers;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 import views.Screen;
 import views.GameWindow;
 import models.*;
 
-public class GameController implements ActionListener {
+public class GameController {
     
     private String gameStatus;
     private final GameWindow window;
@@ -25,79 +23,104 @@ public class GameController implements ActionListener {
     private Stack stack;
     private int lastCode;
     private Room currentRoom;
+    private boolean gameOver;
+    private boolean keyBoardFound;
+    private boolean gameWon;
      
     public GameController() {
         window = new GameWindow(700, 500, this);
     }
     
+    //starts a new game
     public void startGame() {
-        //create new stack, and room
-        stack = new Stack(10);
+        keyBoardFound = false;
+        gameWon = false;
+        gameOver = false;
+        stack = new Stack();
         currentRoom = new Room("green");
-        window.startGame(stack);
+        window.startGame(stack);   
     }
     
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        window.repaint();
+    //restarts a game in progress
+    public void restartGame() {
+        //create new stack, and room
+        lastCode = 0;
+        keyBoardFound = false;
+        gameWon = false;
+        gameOver = false;
+        stack = new Stack();
+        currentRoom = new Room("green");
+        window.restartGame(stack);
     }
     
+    //returns the current room
     public Room getCurrentRoom() {
         return currentRoom;
     }
     
+    //executes when the push button in pressed, moves the player forward
     public void moveTo(int code, String color) {
-       
-       if (codeIsValid(code) && colorIsValid(color) && isAdjacent(color)) { 
-           currentRoom.setCode(code);
-           stack.push(currentRoom);
-           currentRoom = new Room(color);
-       }
-       else {
-           gameOver();
-       }
-       lastCode = code;
-       window.updateRoom();
-       window.repaint();
+        if (!gameOver && !gameWon) {
+            if (codeIsValid(code, "push") && colorIsValid(color) && isAdjacent(color)) { 
+                currentRoom.setCode(code);
+                stack.push(currentRoom);
+                currentRoom = new Room(color);
+                if (currentRoom.getColor().contentEquals("gold")) {
+                    keyBoardFound();
+                }
+            }
+            else {
+                gameOver();
+            }
+            lastCode = code;
+            window.updateRoom();
+            window.repaint();   
+        }
     }
     
+    //executes when the back button is pressed, moves the player backwards
     public void moveBack(int code, String color) {
-        Room currentRoom = (Room)stack.peek();
+        if (!gameOver && !gameWon) {
+            if (!stack.empty()) {   
+                Room room = (Room)stack.peek();
         
-        stack.pop();
-        
-        if ((Room)stack.peek() != null) {
-            Room destinationRoom = (Room)stack.peek();
-        
-            if (destinationRoom.getCode() != code || color.compareTo(destinationRoom.getColor()) != 0 ) {
-                stack.push(currentRoom);
+                if (color.contentEquals(room.getColor()) && room.getCode() == code) {
+                    stack.pop();
+                    currentRoom = room;
+                    if (currentRoom.getColor().contentEquals("green") && keyBoardFound) {
+                        gameWon();
+                    }
+                }
+                else {
+                    gameOver();
+                }
+
+                window.updateRoom();
+                window.repaint();
+            }
+            else {
                 gameOver();
             }
         }
-        else {
-            gameOver();
-        }
-        
-        window.updateRoom();
-        window.repaint();
     }
     
+    //dumps the contents to the stack to the console for testing
     public void dumpStack() {
         Room room;
         Stack tempStack = new Stack(10);
         
-        if (stack.peek() != null) {
-            do {
+        if (!stack.empty()) {
+            while (!stack.empty()) {
                 room = (Room)stack.peek();
                 tempStack.push(room);
-                
+
                 String color = room.getColor();
                 int code = room.getCode();
-                
+
                 System.out.print("Room: " + color + " - Code: " + code + "\n");
-                
+
                 stack.pop();
-            } while(stack.peek() != null);
+            }
             
             do {
                 stack.push(tempStack.peek());
@@ -106,10 +129,25 @@ public class GameController implements ActionListener {
         }   
     }
     
+    //executes when the player dies
     private void gameOver() {
+        gameOver = true;
         window.gameOver();
     }
     
+    //executes when the player reaches the gold room
+    private void keyBoardFound() {
+        keyBoardFound = true;
+        window.keyBoardFound();
+    }
+    
+    //executes when the player returns to the green room with the keyboard
+    private void gameWon() {
+        gameWon = true;
+        window.gameWon();
+    }
+    
+    //checks to make sure that the room the player is leaving is adjacent tp the room the are moving to
     private boolean isAdjacent(String color) {
         
         String roomColor = currentRoom.getColor();
@@ -157,15 +195,27 @@ public class GameController implements ActionListener {
         return false;
     }
     
-    private boolean codeIsValid(int code) {
-        if (code <= 999 && code >= 0 && code != lastCode) {
-            return true;
+    //checks to make sure that the code entered is a valid three digit code
+    private boolean codeIsValid(int code, String action) {
+        if (code <= 999 && code >= 1) {
+            if (action.contentEquals("push")) {
+                if (code != lastCode) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return true;
+            } 
         }
         else {
             return false;  
         }
     }
     
+    //checks to make sure the player has entered a valid color
     private boolean colorIsValid(String color) {
         
         String [] colors = {"green", "brown", "pink", "blue", "red", "yellow", "gold"};

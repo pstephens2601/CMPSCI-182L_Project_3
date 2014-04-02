@@ -12,15 +12,24 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MainMenu extends JMenuBar {  
+public class MainMenu extends JMenuBar {
+    
+    private JMenu fileMenu;
+    private JMenu gameMenu;
+    private JMenuItem startRef;
+    private JMenuItem restartRef;
+    
     
     public MainMenu(final GameController game) {
-        add(buildFileMenu(game));
-        add(buildGameMenu(game));   
+        fileMenu = buildFileMenu(game);
+        gameMenu = buildGameMenu(game);
+        
+        add(fileMenu);
+        add(gameMenu);   
     }
     
     private JMenu buildFileMenu(final GameController game) {
-        JMenu fileMenu = new JMenu("File");
+        JMenu localFileMenu = new JMenu("File");
         
         JMenuItem exit = new JMenuItem("Exit");
         exit.addActionListener(new ActionListener(){
@@ -29,14 +38,14 @@ public class MainMenu extends JMenuBar {
                 System.exit(0);
             }
         });
-        fileMenu.add(exit);
+        localFileMenu.add(exit);
         
-        return fileMenu;
+        return localFileMenu;
     }
     
     private JMenu buildGameMenu(final GameController game) {
         
-        JMenu gameMenu = new JMenu("game");
+        JMenu localGameMenu = new JMenu("game");
         
         JMenuItem start = new JMenuItem("Start Game");
         start.addActionListener(new ActionListener() {
@@ -45,7 +54,8 @@ public class MainMenu extends JMenuBar {
                 game.startGame();
             }
         });
-        gameMenu.add(start);
+        localGameMenu.add(start);
+        startRef = start;
         
         JMenuItem end = new JMenuItem("End Game");
         end.addActionListener(new ActionListener() {
@@ -54,8 +64,27 @@ public class MainMenu extends JMenuBar {
                 game.endGame();
             }
         });
-        gameMenu.add(end);
+        localGameMenu.add(end);
         
-        return gameMenu;
+        JMenuItem restart = new JMenuItem("Restart Game");
+        restart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                game.restartGame();
+            }
+        });
+      
+        restartRef = restart;
+        
+        return localGameMenu;
+    }
+    
+    public void startGame() {
+        gameMenu.insert(restartRef, 0);
+        gameMenu.remove(startRef); 
+    }
+    public void endGame() {
+        gameMenu.insert(startRef, 0);
+        gameMenu.remove(restartRef);
     }
 }

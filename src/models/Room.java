@@ -1,8 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*------------------------------------------------------------------------------
+    Programmer: Patrick Stephens
+    Email: pstephens2601@gmail.com
+    Date: 3/21/14
+    Title/Class: Project 3  / CMPSCI 182L - Ferguson
+
+    Class Description:  Creates a basic room object with variables for color
+    and code.
+ -----------------------------------------------------------------------------*/
 
 package models;
 

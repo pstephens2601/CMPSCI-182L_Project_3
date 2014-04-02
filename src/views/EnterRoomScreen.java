@@ -1,8 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*------------------------------------------------------------------------------
+    Programmer: Patrick Stephens
+    Email: pstephens2601@gmail.com
+    Date: 3/21/14
+    Title/Class: Project 3  / CMPSCI 182L - Ferguson
+
+    Class Description:  Creates an array based stack that can increase or
+    decrease in size if needed.
+ -----------------------------------------------------------------------------*/
 
 package views;
 
@@ -57,7 +61,7 @@ public class EnterRoomScreen extends Screen implements ActionListener {
 
         if (e.getSource()== popButton) {
             String codeInput = codeField.getText();
-            String colorInput = colorField.getText();
+            String colorInput = colorField.getText().toLowerCase();
             try {
                 int code = Integer.parseInt(codeInput);
                 game.moveBack(code, colorInput);
@@ -69,7 +73,7 @@ public class EnterRoomScreen extends Screen implements ActionListener {
 
         if (e.getSource()== pushButton) {
             String codeInput = codeField.getText();
-            String colorInput = colorField.getText();
+            String colorInput = colorField.getText().toLowerCase();
             try {
                 int code = Integer.parseInt(codeInput);
                 game.moveTo(code, colorInput);
@@ -91,8 +95,8 @@ public class EnterRoomScreen extends Screen implements ActionListener {
     }
     
     @Override
-    public void pauseGame() {
-        
+    public void restartGame(Stack stack) {
+        setVisible(false);
     }
     
     @Override

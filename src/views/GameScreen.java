@@ -31,9 +31,8 @@ public class GameScreen extends Screen {
         map.startGame(newStack);
     }
     
-    @Override
-    public void pauseGame() {
-        
+    public void restartGame(Stack newStack) {
+        map.restartGame(newStack);
     }
     
     @Override

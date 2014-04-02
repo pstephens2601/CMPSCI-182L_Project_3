@@ -15,12 +15,19 @@ import java.awt.event.ActionListener;
 public class Map extends Screen {
     private JLabel invalidInputError;
     private boolean gameOver = false;
+    private boolean gameWon = false;
+    private boolean keyBoardFound = false;
     private Image gameOverImage;
+    private Image gameWonImage;
+    private Image keyBoardFoundImage;
     private GameController game;
+    
     
     public Map(GameController currentGame) {
         game = currentGame;
         setGameOverImage();
+        setGameWonImage();
+        setKeyboardFoundImage();
         setFocusable(true);
     }
     
@@ -34,6 +41,12 @@ public class Map extends Screen {
         if (gameOver == true) {
             g2d.drawImage(gameOverImage, 150, 100, this);
         }
+        if (gameWon == true) {
+            g2d.drawImage(gameWonImage, 200, 150, this);
+        }
+        if (keyBoardFound == true) {
+            g2d.drawImage(keyBoardFoundImage, 550, 25, this);
+        }
     }
     
     @Override
@@ -44,13 +57,19 @@ public class Map extends Screen {
     }
     
     @Override
-    public void endGame() {
-        
+    public void restartGame(Stack newStack) {
+        stack = newStack;
+        gameOver = false;
+        gameWon = false;
+        keyBoardFound = false;
+        setCurrentRoom();
+        repaint();
     }
     
     @Override
-    public void pauseGame() {
-        
+    public void endGame() {
+        gameOver = false;
+        gameWon = false;
     }
     
     public void setCurrentRoom() {
@@ -62,9 +81,27 @@ public class Map extends Screen {
        gameOver = true;
     }
     
+    public void gameWon() {
+       gameWon = true;
+    }
+    
+    public void keyBoardFound() {
+       keyBoardFound = true;
+    }
+    
     private void setGameOverImage() {
         ImageIcon pic = new ImageIcon(this.getClass().getResource("/images/GameOver.png"));
         gameOverImage = pic.getImage();
+    }
+    
+    private void setGameWonImage() {
+        ImageIcon pic = new ImageIcon(this.getClass().getResource("/images/GameWon.png"));
+        gameWonImage = pic.getImage();
+    }
+    
+    private void setKeyboardFoundImage() {
+        ImageIcon pic = new ImageIcon(this.getClass().getResource("/images/KeyBoard.png"));
+        keyBoardFoundImage = pic.getImage();
     }
     
     private void setMapColor() {

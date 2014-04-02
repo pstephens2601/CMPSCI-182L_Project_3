@@ -24,8 +24,8 @@ public class TitleScreen extends Screen {
     }
     
     @Override
-    public void pauseGame() {
-        
+    public void restartGame(Stack stack) {
+        setVisible(false);
     }
     
     @Override

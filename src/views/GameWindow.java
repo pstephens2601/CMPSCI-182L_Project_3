@@ -14,13 +14,15 @@ import models.*;
 
 public class GameWindow extends JFrame {
     
-    private Screen [] screens = new Screen [3];
+    private Screen [] screens = new Screen [2];
     private JPanel screenContainer = new JPanel();
+    private MainMenu menu;
     private CardLayout cards = new CardLayout();
     private Stack roomStack;
     
     public GameWindow(GameController game) {
-        setJMenuBar(new MainMenu(game));
+        menu = new MainMenu(game);
+        setJMenuBar(menu);
         setTitle("The Golden Keyboard");
         setSize(800, 800);
         setResizable(false);
@@ -32,8 +34,8 @@ public class GameWindow extends JFrame {
     }
     
     public GameWindow(int width, int height, GameController game) {
-        
-        setJMenuBar(new MainMenu(game));
+        menu = new MainMenu(game);
+        setJMenuBar(menu);
         setTitle("The Golden Keyboard");
         setSize(width, height);
         setResizable(false);
@@ -46,11 +48,14 @@ public class GameWindow extends JFrame {
     
     public void startGame(Stack stack) {
         cards.show(screenContainer, "game");
+        menu.startGame();
         screens[1].startGame(stack);
     }
     
-    public void getDoorCode() {
-        cards.show(screenContainer, "doorCode");
+    public void restartGame(Stack stack) {
+        //cards.show(screenContainer, "game");
+        //menu.startGame();
+        screens[1].restartGame(stack);
     }
     
     public void updateRoom() {
@@ -62,13 +67,29 @@ public class GameWindow extends JFrame {
         cards.show(screenContainer, "title");
         for (int i = 0; i < screens.length; i++) {
             screens[i].endGame();
-        } 
+        }
+        menu.endGame();
     }
     
     public void gameOver() {
         GameScreen screen = (GameScreen)screens[1];
         Map map = screen.getMap();
         map.gameOver();
+        repaint();
+    }
+    
+    public void gameWon() {
+        GameScreen screen = (GameScreen)screens[1];
+        Map map = screen.getMap();
+        map.gameWon();
+        repaint();
+    }
+    
+    public void keyBoardFound() {
+        GameScreen screen = (GameScreen)screens[1];
+        Map map = screen.getMap();
+        map.keyBoardFound();
+        repaint();
     }
      
     public void setStack(Stack newStack) {
@@ -82,7 +103,5 @@ public class GameWindow extends JFrame {
         screenContainer.add(screens[0], "title");
         screens[1] =  new GameScreen(currentGame);
         screenContainer.add(screens[1], "game");
-        screens[2] = new EnterRoomScreen(currentGame);
-        screenContainer.add(screens[2], "doorCode");
     }   
 }
