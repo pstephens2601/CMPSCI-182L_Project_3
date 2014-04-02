@@ -49,7 +49,12 @@ public class Stack {
     }
     
     public Object peek() {
-        return stack[top];
+        if (top >= 0) {
+            return stack[top];
+        }
+        else {
+            return null;
+        }
     }
     
     public void empty() {   

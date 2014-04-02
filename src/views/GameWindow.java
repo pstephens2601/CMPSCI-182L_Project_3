@@ -10,11 +10,11 @@ import controllers.GameController;
 import views.Screen;
 import javax.swing.*;
 import java.awt.*;
-import models.Stack;
+import models.*;
 
 public class GameWindow extends JFrame {
     
-    private Screen [] screens = new Screen [2];
+    private Screen [] screens = new Screen [3];
     private JPanel screenContainer = new JPanel();
     private CardLayout cards = new CardLayout();
     private Stack roomStack;
@@ -49,6 +49,15 @@ public class GameWindow extends JFrame {
         screens[1].startGame(stack);
     }
     
+    public void getDoorCode() {
+        cards.show(screenContainer, "doorCode");
+    }
+    
+    public void updateRoom() {
+        GameScreen screen = (GameScreen)screens[1];
+        screen.updateRoom();
+    }
+    
     public void endGame() {
         cards.show(screenContainer, "title");
         for (int i = 0; i < screens.length; i++) {
@@ -56,6 +65,12 @@ public class GameWindow extends JFrame {
         } 
     }
     
+    public void gameOver() {
+        GameScreen screen = (GameScreen)screens[1];
+        Map map = screen.getMap();
+        map.gameOver();
+    }
+     
     public void setStack(Stack newStack) {
         roomStack = newStack;
     }
@@ -67,5 +82,7 @@ public class GameWindow extends JFrame {
         screenContainer.add(screens[0], "title");
         screens[1] =  new GameScreen(currentGame);
         screenContainer.add(screens[1], "game");
+        screens[2] = new EnterRoomScreen(currentGame);
+        screenContainer.add(screens[2], "doorCode");
     }   
 }

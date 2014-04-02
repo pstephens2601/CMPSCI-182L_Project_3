@@ -16,10 +16,13 @@ public class GameScreen extends Screen {
     private Map map;
             
     public GameScreen(GameController currentGame) {
-        setBackground(Color.YELLOW);
         setLayout(new BorderLayout());
         buildSubScreens(currentGame);
         setVisible(false);
+    }
+    
+    public Map getMap() {
+        return map;
     }
     
     @Override
@@ -38,10 +41,15 @@ public class GameScreen extends Screen {
         
     }
     
+    public void updateRoom() { 
+        map.setCurrentRoom();
+    }
+    
     private void buildSubScreens(GameController currentGame) {
         JPanel bottom = new JPanel();
         bottom.setBackground(Color.WHITE);
-        bottom.setPreferredSize(new Dimension(60, 60));       
+        bottom.setPreferredSize(new Dimension(60, 60));
+        bottom.add(new EnterRoomScreen(currentGame));
         add(bottom, BorderLayout.SOUTH);
         
         map = new Map(currentGame);
