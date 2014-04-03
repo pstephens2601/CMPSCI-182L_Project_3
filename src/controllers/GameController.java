@@ -87,7 +87,7 @@ public class GameController {
                 if (color.contentEquals(room.getColor()) && room.getCode() == code) {
                     stack.pop();
                     currentRoom = room;
-                    if (currentRoom.getColor().contentEquals("green") && keyBoardFound) {
+                    if (currentRoom.getColor().contentEquals("green") && keyBoardFound && stack.empty()) {
                         gameWon();
                     }
                 }
@@ -125,7 +125,7 @@ public class GameController {
             do {
                 stack.push(tempStack.peek());
                 tempStack.pop();
-            } while(tempStack.peek() != null);
+            } while(!tempStack.empty());
         }   
     }
     

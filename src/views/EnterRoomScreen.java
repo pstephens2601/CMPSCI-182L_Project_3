@@ -4,8 +4,8 @@
     Date: 3/21/14
     Title/Class: Project 3  / CMPSCI 182L - Ferguson
 
-    Class Description:  Creates an array based stack that can increase or
-    decrease in size if needed.
+    Class Description:  Creates the screen at the bottom of the game window
+    with text fields and buttons.
  -----------------------------------------------------------------------------*/
 
 package views;
